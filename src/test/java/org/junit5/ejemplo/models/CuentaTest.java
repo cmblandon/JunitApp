@@ -1,9 +1,6 @@
 package org.junit5.ejemplo.models;
 
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import org.junit5.ejemplo.exceptions.DineroInsuficienteException;
 
 import java.math.BigDecimal;
@@ -15,13 +12,23 @@ class CuentaTest {
 
     @BeforeEach
     void initMetodoTest() {
-        this.cuenta = new Cuenta("Cristian", new BigDecimal("100000.12345"));
+        this.cuenta = new Cuenta("Cristian", new BigDecimal("100.12345"));
         System.out.println("Iniciando el método");
     }
 
     @AfterEach
     void tearDown() {
         System.out.println("Finalizando el Método de prueba");
+    }
+
+    @BeforeAll
+    static void beforeAll(){
+        System.out.println("Inicializando el test");
+    }
+
+    @AfterAll
+    static void afterClass(){
+        System.out.println("Finalizando el test");
     }
 
     @DisplayName("Nombre de la cuenta corriente!")
@@ -40,7 +47,7 @@ class CuentaTest {
     @Test
     void testSaldoCuenta() {
         assertNotNull(cuenta.getSaldo());
-        assertEquals(100000.12345, cuenta.getSaldo().doubleValue());
+        assertEquals(100.12345, cuenta.getSaldo().doubleValue());
         assertFalse(cuenta.getSaldo().compareTo(BigDecimal.ZERO) < 0);
         assertTrue(cuenta.getSaldo().compareTo(BigDecimal.ZERO) > 0);
     }
