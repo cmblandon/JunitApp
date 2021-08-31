@@ -1,9 +1,11 @@
 package org.junit5.ejemplo.models;
 
 import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.condition.*;
 import org.junit5.ejemplo.exceptions.DineroInsuficienteException;
 
 import java.math.BigDecimal;
+import java.util.Properties;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -22,12 +24,12 @@ class CuentaTest {
     }
 
     @BeforeAll
-    static void beforeAll(){
+    static void beforeAll() {
         System.out.println("Inicializando el test");
     }
 
     @AfterAll
-    static void afterClass(){
+    static void afterClass() {
         System.out.println("Finalizando el test");
     }
 
@@ -123,5 +125,57 @@ class CuentaTest {
                 () -> assertTrue(banco.getCuentas().stream()
                         .anyMatch(c -> c.getPersona().equals("Cristian Doe")))
         );
+    }
+
+    @Test
+    @EnabledOnOs(OS.WINDOWS)
+    void testSoloWindows() {
+    }
+
+    @Test
+    @EnabledOnOs({OS.LINUX, OS.MAC})
+    void testSoloLinuxMac() {
+    }
+
+    @Test
+    @DisabledOnOs(OS.WINDOWS)
+    void testNoWindows() {
+    }
+
+    @Test
+    @EnabledOnJre(JRE.JAVA_8)
+    void testJdk8() {
+    }
+
+    @Test
+    @DisabledOnJre(JRE.JAVA_8)
+    void testNoJdk8() {
+    }
+
+    @Test
+    void testPrintSystemProperties() {
+        Properties properties = System.getProperties();
+        properties.forEach((k, v) -> System.out.println(k + ":" + v));
+    }
+
+    @Test
+    @EnabledIfSystemProperty(named = "java.version", matches = "1.8")
+    void testJavaVersion() {
+        Properties properties = System.getProperties();
+        properties.forEach((k, v) -> System.out.println(k + ":" + v));
+    }
+
+    @Test
+    @DisabledIfSystemProperty(named = "os.arch", matches = ".*32.*")
+    void testSolo64() {
+        Properties properties = System.getProperties();
+        properties.forEach((k, v) -> System.out.println(k + ":" + v));
+    }
+
+    @Test
+    @EnabledIfSystemProperty(named = "ENV", matches = "dev∫")
+    void testDev() {
+        Properties properties = System.getProperties();
+        properties.forEach((k, v) -> System.out.println(k + ":" + v));
     }
 }
