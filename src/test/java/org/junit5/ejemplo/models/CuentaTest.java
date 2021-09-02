@@ -9,6 +9,8 @@ import java.util.Map;
 import java.util.Properties;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assumptions.*;
+
 
 class CuentaTest {
     Cuenta cuenta;
@@ -188,18 +190,40 @@ class CuentaTest {
 
     @Test
     @EnabledIfEnvironmentVariable(named = "HOME", matches = "/Users/cristianblandon")
-    void testHome(){
+    void testHome() {
     }
 
     @Test
     @EnabledIfEnvironmentVariable(named = "ENVIRONMENT", matches = "dev")
-    void testEnv(){
+    void testEnv() {
 
     }
 
     @Test
     @DisabledIfEnvironmentVariable(named = "ENVIRONMENT", matches = "prod")
-    void testProdDisabled(){
+    void testProdDisabled() {
+    }
 
+    @DisplayName("Saldo de la cuenta corriente DEV!")
+    @Test
+    void testSaldoCuentaDev() {
+        boolean esDev = "dev".equals(System.getProperty("ENV"));
+        assumeTrue(esDev);
+        assertNotNull(cuenta.getSaldo());
+        assertEquals(100.12345, cuenta.getSaldo().doubleValue());
+        assertFalse(cuenta.getSaldo().compareTo(BigDecimal.ZERO) < 0);
+        assertTrue(cuenta.getSaldo().compareTo(BigDecimal.ZERO) > 0);
+    }
+
+    @DisplayName("Saldo de la cuenta corriente DEV2!")
+    @Test
+    void testSaldoCuentaDev2() {
+        boolean esDev = "dev".equals(System.getProperty("ENV"));
+        assumingThat(esDev, () -> {
+            assertNotNull(cuenta.getSaldo());
+            assertEquals(100.12345, cuenta.getSaldo().doubleValue());
+        });
+        assertFalse(cuenta.getSaldo().compareTo(BigDecimal.ZERO) < 0);
+        assertTrue(cuenta.getSaldo().compareTo(BigDecimal.ZERO) > 0);
     }
 }
