@@ -2,6 +2,8 @@ package org.junit5.ejemplo.models;
 
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.condition.*;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 import org.junit5.ejemplo.exceptions.DineroInsuficienteException;
 
 import javax.swing.plaf.basic.BasicInternalFrameTitlePane;
@@ -258,6 +260,14 @@ class CuentaTest {
         assertNotNull(cuenta.getSaldo());
         assertEquals(10, cuenta.getSaldo().intValue());
         assertEquals("10.12345", cuenta.getSaldo().toPlainString());
+    }
+
+    @ParameterizedTest(name = "numero {index} valor {0} {argumentsWithNames}")
+    @ValueSource(strings = {"90", "100", "200", "300", "500", "700", "1000"})
+    void testDebitoCuentaParametrized(String monto) {
+        cuenta.debito(new BigDecimal(monto));
+        assertNotNull(cuenta.getSaldo());
+        assertTrue(cuenta.getSaldo().compareTo(BigDecimal.ZERO) > 0);
     }
 
 }
