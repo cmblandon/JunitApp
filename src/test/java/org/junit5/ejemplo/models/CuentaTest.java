@@ -3,11 +3,16 @@ package org.junit5.ejemplo.models;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.condition.*;
 import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvFileSource;
+import org.junit.jupiter.params.provider.CsvSource;
+import org.junit.jupiter.params.provider.MethodSource;
 import org.junit.jupiter.params.provider.ValueSource;
 import org.junit5.ejemplo.exceptions.DineroInsuficienteException;
 
 import javax.swing.plaf.basic.BasicInternalFrameTitlePane;
 import java.math.BigDecimal;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 
@@ -264,10 +269,38 @@ class CuentaTest {
 
     @ParameterizedTest(name = "numero {index} valor {0} {argumentsWithNames}")
     @ValueSource(strings = {"90", "100", "200", "300", "500", "700", "1000"})
-    void testDebitoCuentaParametrized(String monto) {
+    void testDebitoCuentaValueSource(String monto) {
         cuenta.debito(new BigDecimal(monto));
         assertNotNull(cuenta.getSaldo());
         assertTrue(cuenta.getSaldo().compareTo(BigDecimal.ZERO) > 0);
+    }
+
+    @ParameterizedTest(name = "número {index} valor {0} {argumentsWithNames}")
+    @CsvSource({"1,90", "2,100", "3,200", "4,300", "5,500", "6,700", "7,1000"})
+    void testDebitoCuentaCsvSource(String index, String monto) {
+        cuenta.debito(new BigDecimal(monto));
+        assertNotNull(cuenta.getSaldo());
+        assertTrue(cuenta.getSaldo().compareTo(BigDecimal.ZERO) > 0);
+    }
+
+    @ParameterizedTest(name = "número {index} valor {0} {argumentsWithNames}")
+    @CsvFileSource(resources = "/data.csv")
+    void testDebitoCuentaCsvFileSource(String monto) {
+        cuenta.debito(new BigDecimal(monto));
+        assertNotNull(cuenta.getSaldo());
+        assertTrue(cuenta.getSaldo().compareTo(BigDecimal.ZERO) > 0);
+    }
+
+    @ParameterizedTest(name = "número {index} valor {0} {argumentsWithNames}")
+    @MethodSource("montoList")
+    void testDebitoCuentaMethodSource(String monto) {
+        cuenta.debito(new BigDecimal(monto));
+        assertNotNull(cuenta.getSaldo());
+        assertTrue(cuenta.getSaldo().compareTo(BigDecimal.ZERO) > 0);
+    }
+
+    static List<String> montoList() {
+        return Arrays.asList("90", "100", "200", "300", "500", "700", "1000");
     }
 
 }
