@@ -4,6 +4,7 @@ import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.condition.*;
 import org.junit5.ejemplo.exceptions.DineroInsuficienteException;
 
+import javax.swing.plaf.basic.BasicInternalFrameTitlePane;
 import java.math.BigDecimal;
 import java.util.Map;
 import java.util.Properties;
@@ -244,6 +245,19 @@ class CuentaTest {
         });
         assertFalse(cuenta.getSaldo().compareTo(BigDecimal.ZERO) < 0);
         assertTrue(cuenta.getSaldo().compareTo(BigDecimal.ZERO) > 0);
+    }
+
+    @DisplayName("Probando método Reapeat en Débiuto Cuenta")
+    @RepeatedTest(value = 5, name = "Repetición número {currentRepetition} de {totalRepetitions}")
+    void testDebitoCuentaRepeated(RepetitionInfo info) {
+        if (info.getCurrentRepetition() == 3) {
+            System.out.println("Estamos en la repetición: " + info.getCurrentRepetition());
+        }
+        //cuenta = new Cuenta("Cristian", new BigDecimal("100.12345"));
+        cuenta.debito(new BigDecimal(90));
+        assertNotNull(cuenta.getSaldo());
+        assertEquals(10, cuenta.getSaldo().intValue());
+        assertEquals("10.12345", cuenta.getSaldo().toPlainString());
     }
 
 }
