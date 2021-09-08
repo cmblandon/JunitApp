@@ -43,6 +43,7 @@ class CuentaTest {
         System.out.println("Finalizando el test");
     }
 
+    @Tag("Cuenta")
     @Nested
     @DisplayName("Probando atributos de cuenta corriente")
     class CuentaTestNombreySaldo {
@@ -79,6 +80,7 @@ class CuentaTest {
 
     @Nested
     class CuentaOperaciones {
+        @Tag("Cuenta")
         @Test
         void testDebitoCuenta() {
             //cuenta = new Cuenta("Cristian", new BigDecimal("100.12345"));
@@ -88,6 +90,7 @@ class CuentaTest {
             assertEquals("10.12345", cuenta.getSaldo().toPlainString());
         }
 
+        @Tag("Cuenta")
         @Test
         void testCreditoCuenta() {
             //Cuenta cuenta = new Cuenta("Cristian", new BigDecimal("100.12345"));
@@ -97,6 +100,8 @@ class CuentaTest {
             assertEquals("190.12345", cuenta.getSaldo().toPlainString());
         }
 
+        @Tag("Cuenta")
+        @Tag("Banco")
         @Test
         void testTransferirDineroCuentas() {
             Cuenta cuenta1 = new Cuenta("Jonh Doe", new BigDecimal("1000000"));
@@ -109,6 +114,8 @@ class CuentaTest {
         }
     }
 
+    @Tag("Cuenta")
+    @Tag("Exceptions")
     @Test
     void testDineroInsuficienteException() {
         //Cuenta cuenta = new Cuenta("Cristian", new BigDecimal("100.12345"));
@@ -121,6 +128,8 @@ class CuentaTest {
     }
 
     @DisplayName("Probando relaciones entre las cuentas y el banco con assertAll")
+    @Tag("Cuenta")
+    @Tag("Banco")
     @Test
     void testRelacionBancoCuentas() {
         Cuenta cuenta1 = new Cuenta("Jonh Doe", new BigDecimal("1000000"));
@@ -266,6 +275,7 @@ class CuentaTest {
         assertEquals("10.12345", cuenta.getSaldo().toPlainString());
     }
 
+    @Tag("param")
     @Nested
     class PruebasParametrizadas {
         @ParameterizedTest(name = "numero {index} valor {0} {argumentsWithNames}")
