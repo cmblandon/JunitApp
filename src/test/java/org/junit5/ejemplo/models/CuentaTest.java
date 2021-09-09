@@ -21,11 +21,19 @@ import static org.junit.jupiter.api.Assumptions.*;
 
 class CuentaTest {
     Cuenta cuenta;
+    private TestInfo testInfo;
+    private TestReporter testReporter;
 
     @BeforeEach
     void initMetodoTest() {
         this.cuenta = new Cuenta("Cristian", new BigDecimal("100.12345"));
+        this.testInfo = testInfo;
+        this.testReporter = testReporter;
         System.out.println("Iniciando el método");
+        System.out.println("Ejecutando: " + testInfo.getDisplayName() + " " + testInfo.getTestMethod().orElse(null).getName()
+                + " con las etiquetas " + testInfo.getTags());
+        testReporter.publishEntry("Ejecutando: " + testInfo.getDisplayName() + " " + testInfo.getTestMethod().orElse(null).getName()
+                + " con las etiquetas " + testInfo.getTags());
     }
 
     @AfterEach
@@ -50,6 +58,11 @@ class CuentaTest {
         @DisplayName("Nombre")
         @Test
         void testNombreCuenta() {
+            System.out.println(testInfo.getTags());
+            testReporter.publishEntry(testInfo.getTags().toString());
+            if (testInfo.getTags().contains("cuenta")) {
+                System.out.println("Hacer algo con la etiqueta cuenta");
+            }
             //Cuenta cuenta = new Cuenta("Cristian", new BigDecimal("100000.12345"));
             //cuenta.setPersona("Cristian");
             String esperado = "Cristian";
