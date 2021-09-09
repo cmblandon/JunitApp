@@ -10,10 +10,12 @@ import org.junit.jupiter.params.provider.ValueSource;
 import org.junit5.ejemplo.exceptions.DineroInsuficienteException;
 
 import java.math.BigDecimal;
+import java.time.Duration;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
+import java.util.concurrent.TimeUnit;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.Assumptions.*;
@@ -25,13 +27,13 @@ class CuentaTest {
     private TestReporter testReporter;
 
     @BeforeEach
-    void initMetodoTest() {
+    void initMetodoTest(TestInfo testInfo, TestReporter testReporter) {
         this.cuenta = new Cuenta("Cristian", new BigDecimal("100.12345"));
         this.testInfo = testInfo;
         this.testReporter = testReporter;
-        System.out.println("Iniciando el método");
+        /*System.out.println("Iniciando el método");
         System.out.println("Ejecutando: " + testInfo.getDisplayName() + " " + testInfo.getTestMethod().orElse(null).getName()
-                + " con las etiquetas " + testInfo.getTags());
+                + " con las etiquetas " + testInfo.getTags());*/
         testReporter.publishEntry("Ejecutando: " + testInfo.getDisplayName() + " " + testInfo.getTestMethod().orElse(null).getName()
                 + " con las etiquetas " + testInfo.getTags());
     }
@@ -350,5 +352,28 @@ class CuentaTest {
 
     static List<String> montoList() {
         return Arrays.asList("90", "100", "200", "300", "500", "700", "1000");
+    }
+
+    @Nested
+    @Tag("TimeOut")
+    class EjemploTimeOutTest {
+        @Test
+        @Timeout(1)
+        void pruebaTimeOut() throws InterruptedException {
+            TimeUnit.MILLISECONDS.sleep(90);
+        }
+
+        @Test
+        @Timeout(value = 1000, unit = TimeUnit.MILLISECONDS)
+        void pruebaTimeOut2() throws InterruptedException {
+            TimeUnit.MILLISECONDS.sleep(900);
+        }
+
+        @Test
+        void pruebaTimeOutAssertions() {
+            assertTimeout(Duration.ofSeconds(5), ()->{
+                TimeUnit.MILLISECONDS.sleep(4000);
+            });
+        }
     }
 }
